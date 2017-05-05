@@ -5,7 +5,7 @@
 ### Step 1: Install Command Line Tools
 - Open terminal, type “xcode-select --install” in terminal (without quotes)
 - A pop-up windows will appear asking you about install tools, choose install tools, wait install to finish
-  
+
 ### Step 2: Install Homebrew
 Run the following commands to install homebrew.
 ```
@@ -49,19 +49,19 @@ brew install Caskroom/cask/mactex
 ### Step 7: Install Github
 1. Download and install the latest version of Git.
 2. Tell Git your name so your commits will be properly labeled.
-``` 
-git config --global user.name "YOUR NAME" 
 ```
- 
+git config --global user.name "YOUR NAME"
+```
+
 3. Tell Git the email address that will be associated with your Git commits.
 ```
 git config --global user.email "YOUR EMAIL ADDRESS"
 ```
-     
+
 ### Step 8: Download repository and run all
 ```
-git clone https://github.com/rongxinyu/capstone.git
-cd capstone
+git clone https://github.com/ericwbzhang/RoughVol.git
+cd RoughVol
 
 r capstone.r
 python python-version/main.py
