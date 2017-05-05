@@ -1,0 +1,373 @@
+\documentclass[12pt]{article}
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{latexsym} 
+\usepackage{graphicx}
+\usepackage{bm}  
+\usepackage{overpic} 
+\usepackage[normalem]{ulem}
+\usepackage{exscale}
+\usepackage{amsfonts}
+\usepackage{listings}
+
+\lstset{ %
+  language=R,                     % the language of the code
+  basicstyle=\footnotesize,       % the size of the fonts that are used for the code
+  numbers=left,                   % where to put the line-numbers
+  numberstyle=\tiny\color{black},  % the style that is used for the line-numbers
+  stepnumber=1,                   % the step between two line-numbers. If it's 1, each line
+                                  % will be numbered
+  numbersep=5pt,                  % how far the line-numbers are from the code
+  backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  frame=single,                   % adds a frame around the code
+  rulecolor=\color{black},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
+  tabsize=2,                      % sets default tabsize to 2 spaces
+  captionpos=b,                   % sets the caption-position to bottom
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+  title=\lstname,                 % show the filename of files included with \lstinputlisting;
+                                  % also try caption instead of title
+  keywordstyle=\color{blue},      % keyword style
+  commentstyle=\color{green},     % comment style
+  stringstyle=\color{mauve},      % string literal style
+  escapeinside={\%*}{*)},         % if you want to add a comment within your code
+  morekeywords={*,...}            % if you want to add more keywords to the set
+} 
+
+\usepackage[usenames,dvipsnames]{color} % load color package
+
+\textwidth=6.0in \textheight=8.8in \hoffset=-0.2in
+\voffset=-0.85in
+\parskip=6pt
+\baselineskip=9pt
+\topmargin 0.8in
+ 
+\def\black#1{\textcolor{black}{#1}}
+\def\blue#1{\textcolor{blue}{#1}}
+\def\red#1{\textcolor{red}{#1}}
+\def\green#1{\textcolor{green}{#1}}
+\def\yellow#1{\textcolor{yellow}{#1}}
+\def\orange{\textcolor{BurntOrange}}
+
+\newtheorem{definition}{Definition}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{remark}{Remark}[section]
+\newtheorem{example}{Example}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{cor}{Corollary}[section]
+\newtheorem{corollary}{Corollary}[section]
+
+\numberwithin{equation}{section}
+
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\sigl}{\sigma_L}
+\newcommand{\BS}{\rm BS}
+\newcommand{\p}{\partial}
+\newcommand{\var}{{\rm var}}
+\newcommand{\cov}{{\rm cov}}
+\newcommand{\beaa}{\begin{eqnarray*}}
+\newcommand{\eeaa}{\end{eqnarray*}}
+\newcommand{\bea}{\begin{eqnarray}}
+\newcommand{\eea}{\end{eqnarray}}
+\newcommand{\ben}{\begin{enumerate}}
+\newcommand{\een}{\end{enumerate}}
+
+
+\def\cC{\mathcal C}
+\def\cD{\mathcal D}
+\def\cS{\mathcal S}
+\def\cH{\mathcal H}
+\def\cI{\mathcal I}
+\def\cJ{\mathcal J}
+\def\cL{\mathcal L}
+\def\cV{\mathcal V}
+\def\cR{\mathcal R}
+\def\bR{\mathbb R}
+\def\cX{\mathcal X}
+\def\cF{\mathcal F}
+\def\bP{\mathbb P}
+\def\bE{\mathbb E}
+\def\bN{\mathbb N}
+\def\bT{\mathbb T}
+\def\bC{\mathbb C}
+\def\var{\text{var\,}}
+\def\eps{\varepsilon}
+
+\newcommand{\mt}{\mathbf{t}}
+\newcommand{\mS}{\mathbf{S}}
+\newcommand{\tC}{\widetilde{C}}
+\newcommand{\hC}{\widehat{C}}
+\newcommand{\tH}{\widetilde{H}}
+\renewcommand{\O}{\mathcal{O}}
+\newcommand{\dt}{\Delta t}
+\newcommand{\tr}{{\rm tr}}
+
+\providecommand{\keywords}[1]{\textbf{Keywords:} #1}
+
+\begin{document}
+
+
+
+\title{\bf Experiment on Hybrid scheme for Brownian semistationary processes}
+
+\author{
+  Weiyi Chen\footnote{Department of Mathematics, Baruch College, CUNY. {\tt  weiyi.chen@baruchmail.cuny.edu}}{\setcounter{footnote}{1}},
+  Rongxin Yu\footnote{Department of Mathematics, Baruch College, CUNY. {\tt  rongxin.yu@baruchmail.cuny.edu}}{\setcounter{footnote}{2}}, 
+  Wenbo Zhang\footnote{Department of Mathematics, Baruch College, CUNY. {\tt wenbo.zhang@baruchmail.cuny.edu}{\setcounter{footnote}{3}}}
+}
+
+%\date{This version: December 25, 2011}
+
+
+\maketitle\thispagestyle{empty}
+ 
+%%***************************************************************************
+%%
+%%  Document begins here
+%%
+%%***************************************************************************
+
+
+
+\begin{abstract}
+In this report, we implement the hybrid scheme for Brownian semistationary processes \cite{bennedsen2015hybrid} (2015), which is an approximation of the process via discretizing the stochastic integral representation of the process in the time domain, and it is a combination of Wiener integrals of the power function and a Riemann sum. We exemplify the use of the hybrid scheme by three numerical experiments, where we replicate the study of Monte Carlo option pricing in the rough Bergomi model of Bayer et al. \cite{bayer2015pricing}, analyze stability and sensitivity of parameters of hybrid scheme on price, and calibrate the SPX options volatility surface.
+\end{abstract}
+
+\keywords{Stochastic simulation; discretization; Brownian semistationary process; stochastic volatility; regular variation; estimation; option pricing; rough volatility; volatility smile.}
+
+\clearpage
+
+
+
+\section{Introduction}
+
+\subsection{Brownian semistationary processes}
+
+A $\mathcal{BSS}$ process $X$ is defined via the integral representation
+\begin{equation}
+  X(t) = \int_{-\infty}^{t} g(t-s)\sigma(s)dW(s)
+\end{equation}
+where $W$ is a two-sided Brownian motion providing the fundamental noise innovations, the amplitude of which is modulated by a stochastic volatility (intermittency) process $\sigma$ that may depend on $W$. This driving noise is then convolved with a deterministic kernel function $g$ that specifies the dependence structure of $X$. The process $X$ can also be viewed as a moving average of volatility modulated Brownian noise and setting $\sigma(s) = 1$, we see that stationary Brownian moving averages are nested in this class of processes.
+  
+In the applications mentioned above, the case where X is not a semimartingale is particularly relevant. This situation arises when the kernel function $g$ behaves like a power-law near zero; more specifically, when for some $\alpha \in (-\frac{1}{2}, \frac{1}{2}) \setminus \{0\}$,
+\begin{equation}
+  g(x) \propto x^\alpha \text{ for small } x>0
+\end{equation}
+
+The case $\alpha = −1$ is important in statistical modeling of turbulence as it gives rise to processes that are compatible with Kolmogorov’s scaling law for ideal turbulence (Corcuera et al., 2013). Moreover, processes of similar type with $\alpha ≈ −0.4$ have been recently used in the context of option pricing as models of rough volatility (Bayer et al., 2015; Gatheral et al., 2014). The case $\alpha = 0$ would (roughly speaking) lead to a process that is a semimartingale, which is thus excluded. We formulate the relation (1.2) below rigorously using the theory of regular variation (Bingham et al., 1989), which plays a significant role in our subsequent arguments.
+
+\subsection{Hybrid scheme}
+    
+In Bennedsen et al.'s paper \cite{bennedsen2015hybrid}, we study a new discretization scheme for $\mathcal{BSS}$ processes based on approximating the kernel function $g$ in the time domain. The starting point is the Riemann-sum discretization of (1.1). The Riemann-sum scheme builds on an approximation of $g$ using step functions, which has the pitfall of failing to capture appropriately the steepness of $g$ near zero. In particular, this becomes a serious defect under (1.2) when $\alpha \in (-\frac{1}{2}, 0)$. 
+
+In hybrid scheme, the problem is mitigated by approximating $g$ using an appropriate power function near zero and a step function elsewhere. The resulting discretization scheme can be realized as a linear combination of Wiener integrals with respect to the driving Brownian motion $W$ and a Riemann sum, which is why called a hybrid scheme. The hybrid scheme is only slightly more demanding to implement than the Riemann-sum scheme and the schemes have the same computational complexity as the number of discretization cells tends to infinity.
+        
+\subsection{Truncated Brownian semistationary process}
+    
+It is useful to extend the hybrid scheme to a class of non-stationary processes that are closely related to $\mathcal{BSS}$ processes. This extension is important in connection with an application to the rough Bergomi model below. More precisely, we consider processes of the form
+\begin{equation}
+  Y(t) = \int_0^tg(t-s)\sigma(s)dW(s), t\le 0,
+\end{equation}
+where the kernel function $g$, volatility process $\sigma$ and driving Brownian motion $W$ are as before. We call $Y$ a truncated Brownian semistationary ($\mathcal{TBSS}$) process, as $Y$ is obtained from the $\mathcal{BSS}$ process $X$ by truncating the stochastic integral in (1.1) at $0$.
+    
+\subsection{Implementation}
+    
+To replicate the hybrid scheme implementation recipe from Bennedsen et al.'s paper \cite{bennedsen2015hybrid}, we perform the numerical experiment of Monte Carlo option pricing in the rough Bergomi stochastic volatility model of Bayer et al. \cite{bayer2015pricing}, in R code. We use the hybrid scheme to simulate the volatility process in this model and we verify the resulting implied volatility smiles are indistinguishable from those simulated using a method that involves exact simulation of the volatility process. After verification we optimize the codes via vectorizing and utilize multiprocessing technique to accelerate Monte Carlo methods.
+    
+\subsection{Sensitivity analysis}
+    
+After replication, we perform further numerical experiment of sensitivity analysis on option pricing in the rough Bergomi stochastic volatility model of Bayer et al. \cite{bayer2015pricing}. Parameter values used in the rBergomi model include $S_0, \epsilon, \eta, \alpha, \rho$ listed on Bennedsen et al.'s paper \cite{bennedsen2015hybrid}. Parameter values used in Hybrid Scheme include number of periods $n$, the period index to separate the approximate power function near zero and the step function $\kappa$, and the time period unit $T$. And there are other parameter values coming from Monte Carlo method. We keep track of the option price by changing one of the parameter while keep other constant, to figure out the sensitivity of each parameter on option price.
+    
+\subsection{Report Organization}
+    
+The rest of this report is organized as follows. In Section 2 we recall the implementation of Hybrid Scheme for $\mathcal{BSS}$ process and introduce our initial assumptions for parameters, including the extension of the scheme to a class of truncated BSS processes, then proceed to option pricing under rough volatility. Section 3 briefly discusses the code structure with results, and presents the numerical experiments of rough volatility pricing and sensitivity analysis. Section 4 contains the calibration process of SPX option volatility surface, with volatility surface generation, and naive calibration method replicting SVI model, and imporved standard calibration. Section 5 concludes and discusses on computational complexity and implementation improvements from both theory perspective, i.e. vectorization programming, and technique perspective, i.e. multiprocessing.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%  Section: Practical Implementation
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Implementation}
+
+\subsection{Brownian semistationary process}
+Simulating the $\mathcal{BSS}$ process $X$ on the equidistant grid $ \{0, \frac{1}{n}, \frac{2}{n}, \dots, \frac{\lfloor nT \rfloor}{n} \} $ for some $T>0$ using the hybrid scheme entails generating
+\begin{equation}
+  X_n(\frac{i}{n}), i = 0, 1, \dots, \lfloor nT \rfloor.
+\end{equation}
+Provided that we can simulate the random variables
+\begin{equation}
+  \begin{split}
+    W_{i,j}^n &:= \int_{\frac{i}{n}}^{\frac{i+1}{n}} (\frac{i+j}{n} - s) ^ \alpha dW(s), i = -N_n, -N_n+1, \dots, \lfloor nT \rfloor, j = 1,\dots,\kappa \\
+    W_{i}^n &:= \int_{\frac{i}{n}}^{\frac{i+1}{n}} dW(s), i = -N_n, -N_n+1, \dots, \lfloor nT \rfloor \\
+    \sigma_i^n &:= \sigma\left(\frac{i}{n}\right), i = -N_n, -N_n+1, \dots, \lfloor nT \rfloor
+  \end{split}
+\end{equation}
+
+We can compute (2.1) via the formula
+\begin{equation}
+  \begin{split}
+    X_n(\frac{i}{n}) &= \check{X}_n(\frac{i}{n}) + \hat{X}_n (\frac{i}{n}) \\
+    &= \sum_{k=1}^{\kappa} L_g\left(\frac{k}{n}\right)\sigma_{i-k}^n W_{i-k,k}^n + \sum_{k=\kappa+1}^{N_n} g\left(\frac{b_k^*}{n}\right) \sigma_{i-k}^nW_{i-k}^n 
+  \end{split}
+\end{equation}
+
+In order to simulate (2.2), it is instrumental to note that the $\kappa+1$-dimensional random vectors
+\begin{equation}
+  \bm{W}_i^n = (W_i^n, W_{i,1}^n, \dots, W_{i, \kappa}^n, i = -N_n, N_n+1, \dots, \lfloor nT\rfloor-1
+\end{equation}
+
+are i.i.d. according to a multivariate Gaussian with mean zero and covariance matrix $\Sigma$ given by
+\begin{equation}
+  \begin{split}
+    \Sigma_{1,1} &:= \frac{1}{n}, \\
+    \Sigma_{1,j} &= \sum_{j,1} := \frac{(j-1)^{\alpha+1}-(j-2)^{\alpha+1}}{(\alpha+1)n^{\alpha+1}}, \\
+    \Sigma_{j,j} &:= \frac{(j-1)^{2\alpha+1}-(j-2)^{2\alpha+1}}{(2\alpha+1)n^{2\alpha+1}}, \\
+    \Sigma_{j,k} &:= \frac{1}{(j-k)(\alpha+1)n^{2\alpha+1}} ( ((j-1)(k-1))^{\alpha+1} F_1(1,2(\alpha+1),\alpha+2,\frac{k-1}{k-j}) \\
+    & - ((j-2)(k-2))^{\alpha+1} F_1(1,2(\alpha+1)),\alpha+2,\frac{k-2}{k-j}) 
+  \end{split}
+\end{equation}
+for $j,k=2,\dots,\kappa+1$ such that $j\neq k$, where $F_1$ stands for the \textit{Gauss hypergeometric function}.
+
+Thus, $\{\bm{W}_i^n\}_{i=-N_n}^{\lfloor nT \rfloor -1}$ can be generated by taking independent draws from the can be generated by taking independent draws from the multivariate Gaussian distribution $N_{\kappa+1}(\bm{0}, \Sigma)$. If the volatility process $\sigma$ is driven by a standard Brownian motion $Z$, correlated with $W$, say, one could reply on a factor decomposition 
+\begin{equation}
+  Z(t) := \rho W(t) + \sqrt{1-\rho^2} W_\bot (t), t\in\mathcal{R}
+\end{equation}
+where $\rho \in [-1,1]$ is the correlation parameter and $\{W_\bot(t)\}t\in[0,T]$ is a standard Brownian motion independent of $W$. Then one would first generate $\{W_n\}\lfloor nT\rfloor-1$, use (2.6) to generate $\{Z(\frac{i+1}{n}) - Z(\frac{i}{n})\}_{i=-N_n}^{\lfloor nT\rfloor-1}$ and employ some appropriate approximate method to produce $\{\sigma_i^n\}_{i=-N_n}^{\lfloor nT\rfloor-1}$ thereafter.
+
+\subsubsection{Truncated Brownian semistationary process}
+    
+In the case of the $\mathcal{TBSS}$ process $Y$, the observations $Y_n(\frac{i}{n}), i=0,1,\dots,\lfloor nT \rfloor$, given by the hybrid scheme can be computed via
+\begin{equation}
+  Y_n(\frac{i}{n}) = \sum_{k=1}^{\min(i,\kappa)}L_g(\frac{k}{n})\sigma_{i-k}^nW_{i-k,k}^n + \sum_{k=\kappa+1}^{i} g(\frac{b_k^*}{n}\sigma_{i-k}^nW_{i-k}^n),
+\end{equation}
+using the random vectors $\{\bm{W}_i^n\}_{i=0}^{\lfloor nT \rfloor-1}$ and random variables $\{\sigma_i^n\}_{i=0}^{\lfloor nT\rfloor-1}$.
+
+In the hybrid scheme, it typically suffices to take $\kappa$ to be at most 3. Thus, in (2.3), the first sum $\check{X}(\frac{i}{n})$ requires only a negligible computational effort. By contrast, the number of terms in the second sum $\hat{X}(\frac{i}{n})$ increases as $n\rightarrow\infty$. It is then useful to note that
+\begin{equation}
+  \hat{X}(\frac{i}{n}) = \sum_{k=1}^{N_n} \Gamma_k \Xi_{i-k} = (\Gamma\star\Xi)_i
+\end{equation}
+where
+\begin{equation}
+  \begin{split}
+    \Gamma_k := \begin{cases}
+      0, k=1,2,\dots,\kappa \\
+      g(\frac{b_k^*}{n}, k = \kappa+1,\kappa+2,\dots,N_n
+    \end{cases}
+    \Xi_k := \sigma_k^nW_k^n, k = -N_n, -N_n+1, \dots, \lfloor nT \rfloor - 1
+  \end{split}
+\end{equation}
+and $\Gamma\star\Xi$ stands for the discrete convolution of the sequences $\Gamma$ and $\Xi$.
+        
+\subsection{Option pricing under rough volatility}
+        
+We study Monte Carlo option pricing in the rough Bergomi (rBergomi) model of Bayer et al. \cite{bayer2015pricing}. In the rBergomi model, the logarithmic spot variance of the price of the underlying is modeled by a rough Gaussian process.
+
+More precisely, the price of the underlying in the rBergomi model with time horizon $T > 0$ is defined, under an equivalent martingale measure identified with $\mathbb{P}$, as
+\begin{equation}
+  S(t) := S(0) \exp\left(\int_0^t\sqrt{v(s)}dZ(s)-\frac{1}{2}\int_0^tv(s)ds\right), t\in[0,T],
+\end{equation}
+using the spot variance process
+\begin{equation}
+  v(t) := \xi_0\exp\left(\eta\sqrt{2\alpha+1}\int_0^t(t-s)^\alpha dW(s) - \frac{\eta^2}{2}t^{2\alpha+1}\right), t\in[0,T].
+\end{equation}
+Above, $S(0) > 0$, $\eta > 0$ and $\alpha\in(-\frac{1}{2},0)$ are deterministic parameters, and $Z$ is a standard Brownian motion given by
+\begin{equation}
+  Z(t):=\rho W(t)+ \sqrt{1-rho^2} W_\bot(t), t\in[0,T],
+\end{equation}
+where $\rho \in (-1,1)$ is the correlation parameter and $\{W_\bot(t)\}_{t\in[0,T]}$ is a standard Brownian motion independent of $W$. The process $\{\xi_0(t)\}_{t\in[0,T]}$ is the forward variance curve, which we assume here to be flat, $\xi_0(t) = \xi > 0$ for all $t \in [0,T]$.
+
+We aim to compute using Monte Carlo simulation the price of a European call option struck at $K > 0$ with maturity $T$, which is given by
+\begin{equation}
+  C(S(0), K, T) := \mathbb{E} [(S_T - K)^+]
+\end{equation}
+We use the hybrid scheme to simulate $Y$. As the hybrid scheme involves simulating increments of the Brownian motion $W$ driving $Y$, we can conveniently simulate the increments of $Z$, needed for the Euler discretization of $S$, using the representation (2.12).
+      
+\section{Numerical experiment and result}
+
+\subsection{Option pricing under rough volatility}
+As the first experiment, we study Monte Carlo option pricing in the rough Bergomi (rBergomi) model of Bayer et al. (2015). In the rBergomi model, the logarithmic spot variance of the price of the underlying is modeled by a rough Gaussian process, which is a special case of (10.1). By virtue of the rough volatility process, the model fits well to observed implied volatility smiles (Bayer et al., 2015, pp. 15-9). \newline
+
+\begin{tabular}{l*{6}{c}r}
+Parameters & $S(0)$ & $\xi$ & $\eta$ & $\alpha$ & $\rho$ \\
+\hline
+Values & 1 & $0.235^2$ & $1.9$ & $-0.43$ & $-0.9$  \\
+\end{tabular} \newline
+
+We map the option price $C(S(0),K,T)$ given in (2.13) to the corresponding Black-Scholes implied volatility $IV(S(0),K,T)$, see, e.g., Gatheral (2006). Reparameterizing the implied volatility using the log-strike $k := log(K/S0)$ allows us to drop the dependence on the initial price, so we will abuse notation slightly and write $IV(k,T)$ for the corresponding implied volatility. Figure 4 displays implied volatility smiles obtained from the rBergomi model using the hybrid and Riemann-sum schemes to simulate Y , as discussed above, and compares these to the smiles obtained using an exact simulation of Y via Cholesky factorization. The parameter values are given in Table 1. They have been adopted from Bayer et al. (2015), who demonstrate that they result in realistic volatility smiles. We consider two different maturities: "small", $T = 0.041$, and "large", $T = 1$.
+
+Implied volatility smiles corresponding to the option price (15.3), computed using Monte Carlo simulation (1 000 000 replications), with two maturities: T = 0.041 (left) and T = 1 (right). The spot variance process v was simulated using an exact method, the hybrid scheme ($\kappa = 1, 2$ and $b = b*$) and Riemann-sum scheme ($\kappa = 0$ and $b = b*$ (solid lines), $b = b_{FWD}$ (dashed lines)). The parameter values used in the rBergomi model are given in above Table.
+
+\section{Complexity improvements}
+
+\section{Sensitivities analysis}
+
+% \begin{figure}[htb!]
+% \begin{center}
+% \includegraphics{SVIarb}
+% \caption{This is a graph of something}
+% \label{fig:someGraph}
+% \end{center}
+% \end{figure}
+
+\section{Conclusion}
+
+%\appendix
+
+
+\section*{Acknowledgments}
+
+We are very grateful to Jim Gatheral's guide.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%  Bibliography
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{thebibliography}{}
+
+\bibitem{barndorff2007ambit}
+{Barndorff-Nielsen, Ole E} and {Schmiegel, J{\"u}rgen}
+{Ambit processes; with applications to turbulence and tumour growth}
+{\it Springer} (2007)
+
+\bibitem{barndorff2009brownian}
+{Barndorff-Nielsen, Ole E} and {Schmiegel, J{\"u}rgen}
+{Advanced financial modelling}
+{Radon Ser. Comput. Appl. Math} (2009)
+
+\bibitem{bayer2015pricing}
+{Bayer, Christian}, {Friz, Peter K} and {Gatheral, Jim}
+{Available at SSRN}
+{2015}
+
+\bibitem{bennedsen2015hybrid} 
+{Bennedsen, Mikkel}, {Lunde, Asger} and {Pakkanen, Mikko S}
+{Hybrid scheme for Brownian semistationary processes},
+{\it arXiv preprint arXiv:1507.03004} (2015)
+
+\bibitem{jimbook} { Gatheral, J.},
+{The Volatility Surface: A Practitioner's Guide},
+{Wiley Finance} (2006).
+
+\bibitem{ghlow}
+{ Gatheral, J.}, { Hsu, E.P.}, { Laurence, P.}, { Ouyang, C.}, and { Wang, T.-H.},
+{Asymptotics of implied volatility in local volatility models},
+{\it Mathematical Finance} (2011) forthcoming.
+
+\end{thebibliography}
+
+\end{document}
+
+
