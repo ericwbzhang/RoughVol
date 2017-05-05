@@ -1,5 +1,4 @@
-# capstone
-Baruch MFE Capstone project
+# RoughVol Model
 
 ## Running Guide for Mac System
 
